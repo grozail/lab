@@ -15,7 +15,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputCustomer">Customer</label>
-                <select name="customers" class="form-control" id="inputCustomer">
+                <select name="customer" class="form-control" id="inputCustomer">
                     {% for customer in customers %}
                         <option value={{ customer.CustomerId }}>{{ format_customer(customer) }}</option>
                     {% endfor %}
@@ -23,17 +23,17 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="inputDate">Invoice date</label>
-                <input type="date" class="form-control" id="inputDate" placeholder="YYYY-MM-DD">
+                <input name="date" type="date" class="form-control" id="inputDate" placeholder="YYYY-MM-DD">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputAddress">Billing Address</label>
-                <textarea class="form-control" id="inputAddress" rows="3"></textarea>
+                <textarea name="address" class="form-control" id="inputAddress" rows="3"></textarea>
             </div>
             <div class="form-group col-md-6">
                 <label for="inputTotal">Total</label>
-                <input type="number" class="form-control" id="inputTotal" min="0.01">
+                <input name="total" type="number" class="form-control" id="inputTotal" min="0.01" step="0.01">
             </div>
         </div>
         <div class="form-row">

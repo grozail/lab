@@ -12,8 +12,38 @@
     <h3>Edit invoice #{{ invoice.InvoiceId }}</h3>
 
     <form method="POST" action="/edit/invoices/{{ invoice.InvoiceId }}">
-        <div class="form-group">
-
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCustomer">Customer</label>
+                <select name="customer" class="form-control" id="inputCustomer">
+                    {% for customer in customers %}
+                        {% if invoice.CustomerId == customer.CustomerId %}
+                            <option selected value={{ customer.CustomerId }}>{{ format_customer(customer) }}</option>
+                        {% else %}
+                            <option value={{ customer.CustomerId }}>{{ format_customer(customer) }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputDate">Invoice date</label>
+                <input name="date" type="date" class="form-control" id="inputDate" placeholder="YYYY-MM-DD" value={{ invoice.InvoiceDate }}>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputAddress">Billing Address</label>
+                <textarea name="address" class="form-control" id="inputAddress" rows="3">{{ invoice.BillingAddress }}</textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputTotal">Total</label>
+                <input name="total" type="number" class="form-control" id="inputTotal" min="0.01" step="0.01" value={{ invoice.Total }}>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <input type="submit" class="btn btn-success" id="invoiceAdd">
+            </div>
         </div>
     </form>
 {% endblock %}

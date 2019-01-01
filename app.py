@@ -1,5 +1,5 @@
 import os
-import sqlite_web
+import datetime
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -54,11 +54,35 @@ def list_table(table_name):
 @app.route('/edit/invoices/<int:invoice_id>', methods=['GET', 'POST'])
 def edit_invoice(invoice_id):
     if request.form:
-        print('form')
-    return render_template('edit_invoice.html', invoice=Invoices.query.get(invoice_id))
+        form = request.form
+        invoice = Invoices.query.get(invoice_id)
+        invoice.CustomerId = int(form.get('customer'))
+        invoice.BillingAddress = form.get('address')
+        invoice.Total = float(form.get('total'))
+        invoice.InvoiceDate = datetime.datetime.strptime(form.get('date'), '%Y-%m-%d')
+        db.session.commit()
+        return redirect('/list/invoices')
+    return render_template('edit_invoice.html', invoice=Invoices.query.get(invoice_id), customers=Customers.query.all())
 
 
-# --------DELETE SECTION--------
+@app.route('/add/invoice', methods=['POST'])
+def add_invoice():
+    if request.form:
+        form = request.form
+        invoice = Invoices(CustomerId=int(form.get('customer')),
+                           BillingAddress=form.get('address'),
+                           BillingCity='NA',
+                           BillingState='NA',
+                           BillingCountry='NA',
+                           BillingPostalCode='000001',
+                           Total=float(form.get('total')),
+                           InvoiceDate=datetime.datetime.strptime(form.get('date'), '%Y-%m-%d'))
+        db.session.add(invoice)
+        db.session.commit()
+    return redirect('/list/invoices')
+
+
+# --------DELETE--------
 @app.route('/delete/invoices/<int:invoice_id>', methods=['POST'])
 def delete_invoice(invoice_id):
     db.session.delete(Invoices.query.get(invoice_id))
