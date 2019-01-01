@@ -28,23 +28,25 @@ class Customers(db.Model):
     __table__ = db.Model.metadata.tables['customers']
 
 
+def format_customer(customer):
+    return f'{customer.CustomerId}: {customer.FirstName} {customer.LastName}'
+
+
+app.jinja_env.globals.update(format_customer=format_customer)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.form:
         table_name = request.form.get('table')
         return redirect(f'/list/{table_name}')
-        # book = Book(title=request.form.get('title'))
-        # db.session.add(book)
-        # db.session.commit()
-    # books = Book.query.all()
-    # invoices = Invoices.query.all()
     return render_template('index.html', table_names=table_names)
 
 
 @app.route('/list/<table_name>', methods=['GET'])
 def list_table(table_name):
     if table_name == 'invoices':
-        return render_template('list_invoices.html', invoices=Invoices.query.all())
+        return render_template('list_invoices.html', invoices=Invoices.query.all(), customers=Customers.query.all())
     elif table_name == 'customers':
         return render_template('list_customers.html', customers=Customers.query.all())
 

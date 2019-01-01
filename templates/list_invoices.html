@@ -2,14 +2,46 @@
 {% block title %}This is an example page{% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-fixed-top">
-  <!-- ... -->
-</div>
+    <div class="navbar navbar-fixed-top">
+        <!-- ... -->
+    </div>
 {% endblock %}
 
 {% block content %}
     <h1>Grozov Ilya Andreevich 4 course 4 group, 2018</h1>
     <h3>Invoices</h3>
+    <h4 class="m-4">Create invoice</h4>
+    <form method="POST" action="/add/invoice">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCustomer">Customer</label>
+                <select name="customers" class="form-control" id="inputCustomer">
+                    {% for customer in customers %}
+                        <option value={{ customer.CustomerId }}>{{ format_customer(customer) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputDate">Invoice date</label>
+                <input type="date" class="form-control" id="inputDate" placeholder="YYYY-MM-DD">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputAddress">Billing Address</label>
+                <textarea class="form-control" id="inputAddress" rows="3"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputTotal">Total</label>
+                <input type="number" class="form-control" id="inputTotal" min="0.01">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <input type="submit" class="btn btn-success" id="invoiceAdd">
+            </div>
+        </div>
+    </form>
 
     <table class="table">
         <tr>
@@ -30,7 +62,7 @@
                 <td>{{ invoice.Total }}</td>
                 <td>
                     <form method="POST" action="/edit/invoices/{{ invoice.InvoiceId }}">
-                        <input type="submit" value="Update" class="btn btn-primary">
+                        <input type="submit" value="Edit" class="btn btn-primary">
                     </form>
                 </td>
                 <td>
