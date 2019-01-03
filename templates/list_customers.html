@@ -10,6 +10,23 @@
 {% block content %}
     <h1>Grozov Ilya Andreevich 4 course 4 group, 2018</h1>
     <h3>Customers</h3>
+    <form method="POST" action="/add/customer">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCustomerFirstName">First Name</label>
+                <input type="text" name="firstName" id="inputCustomerFirstName" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputCustomerLastName">Last Name</label>
+                <input type="text" name="lastName" id="inputCustomerLastName" class="form-control">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <input type="submit" class="btn btn-success" id="customerAdd">
+            </div>
+        </div>
+    </form>
 
     <table class="table">
         <tr>

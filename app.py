@@ -65,6 +65,18 @@ def edit_invoice(invoice_id):
     return render_template('edit_invoice.html', invoice=Invoices.query.get(invoice_id), customers=Customers.query.all())
 
 
+@app.route('/edit/customers/<int:customer_id>', methods=['GET', 'POST'])
+def edit_customer(customer_id):
+    if request.form:
+        form = request.form
+        customer = Customers.query.get(customer_id)
+        customer.FirstName = form.get('firstName')
+        customer.LastName = form.get('lastName')
+        db.session.commit()
+        return redirect('/list/customers')
+    return render_template('edit_customer.html', customer=Customers.query.get(customer_id))
+
+
 @app.route('/add/invoice', methods=['POST'])
 def add_invoice():
     if request.form:
@@ -82,7 +94,27 @@ def add_invoice():
     return redirect('/list/invoices')
 
 
-# --------DELETE--------
+@app.route('/add/customer', methods=['POST'])
+def add_customer():
+    if request.form:
+        form = request.form
+        customer = Customers(FirstName=form.get('firstName'),
+                             LastName=form.get('lastName'),
+                             Company='NA',
+                             Address='NA',
+                             City='NA',
+                             State='NA',
+                             Country='NA',
+                             PostalCode='NA',
+                             Phone='NA',
+                             Fax='NA',
+                             Email='NA',
+                             SupportRepId=3)
+        db.session.add(customer)
+        db.session.commit()
+    return redirect('/list/customers')
+
+
 @app.route('/delete/invoices/<int:invoice_id>', methods=['POST'])
 def delete_invoice(invoice_id):
     db.session.delete(Invoices.query.get(invoice_id))
@@ -95,26 +127,6 @@ def delete_customer(customer_id):
     db.session.delete(Customers.query.get(customer_id))
     db.session.commit()
     return redirect('/list/customers')
-# --------END DELETE SECTION--------
-
-
-@app.route('/update', methods=['POST'])
-def update():
-    newtitle = request.form.get('newtitle')
-    oldtitle = request.form.get('oldtitle')
-    # book = Book.query.filter_by(title=oldtitle).first()
-    # book.title = newtitle
-    db.session.commit()
-    return redirect('/')
-
-
-@app.route('/delete', methods=['POST'])
-def delete():
-    title = request.form.get('title')
-    # book = Book.query.filter_by(title=title).first()
-    # db.session.delete(book)
-    db.session.commit()
-    return redirect('/')
 
 
 if __name__ == '__main__':
