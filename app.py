@@ -13,7 +13,7 @@ database_file = 'sqlite:///{}'.format(os.path.join(project_dir, 'chinook.db'))
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = database_file
-app.config['SECRET_KEY'] = 'fuck-the-fucking-borovik'
+app.config['SECRET_KEY'] = 'somereallyimportantstring'
 db = SQLAlchemy(app)
 db.Model.metadata.reflect(db.engine)
 Bootstrap(app)
@@ -28,11 +28,24 @@ class Customers(db.Model):
     __table__ = db.Model.metadata.tables['customers']
 
 
+class Albums(db.Model):
+    __table__ = db.Model.metadata.tables['albums']
+
+
+class Artists(db.Model):
+    __table__ = db.Model.metadata.tables['artists']
+
+
 def format_customer(customer):
     return f'{customer.CustomerId}: {customer.FirstName} {customer.LastName}'
 
 
+def format_album(album):
+    return f'{album.AlbumId}: {Artists.query.get(album.ArtistId).Name} - {album.Title}'
+
+
 app.jinja_env.globals.update(format_customer=format_customer)
+app.jinja_env.globals.update(format_album=format_album)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -46,7 +59,10 @@ def index():
 @app.route('/list/<table_name>', methods=['GET'])
 def list_table(table_name):
     if table_name == 'invoices':
-        return render_template('list_invoices.html', invoices=Invoices.query.all(), customers=Customers.query.all())
+        return render_template('list_invoices.html',
+                               invoices=Invoices.query.all(),
+                               customers=Customers.query.all(),
+                               albums=Albums.query.all())
     elif table_name == 'customers':
         return render_template('list_customers.html', customers=Customers.query.all())
 

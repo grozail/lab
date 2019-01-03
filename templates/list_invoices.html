@@ -38,6 +38,16 @@
         </div>
         <div class="form-row">
             <div class="form-group col-md-12">
+                <label for="inputAlbums">Albums</label>
+                <select multiple class="form-control" id="inputAlbums">
+                    {% for album in albums %}
+                        <option value={{ album.AlbumId }}>{{ format_album(album) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
                 <input type="submit" class="btn btn-success" id="invoiceAdd">
             </div>
         </div>
